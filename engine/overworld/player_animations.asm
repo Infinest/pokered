@@ -531,6 +531,7 @@ _HandleMidJump:
 	ld hl, wd730
 	res 7, [hl] ; not simulating joypad states any more
 	xor a
+	ld [wPlayerKeepDirection], a
 	ld [wJoyIgnore], a
 	ret
 

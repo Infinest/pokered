@@ -235,7 +235,13 @@ OverworldLoopLessDelay::
 
 .noDirectionChange
 	ld a, [wPlayerDirection] ; current direction
+	ld c, a
+	ld a, [wPlayerKeepDirection]
+	and a
+	jr nz, .DontTurn
+	ld a, c
 	ld [wPlayerMovingDirection], a ; save direction
+.DontTurn
 	call UpdateSprites
 	ld a, [wWalkBikeSurfState]
 	cp $02 ; surfing
@@ -538,12 +544,30 @@ WarpFound2::
 	set 0, [hl] ; have the player's sprite step out from the door (if there is one)
 	call IgnoreInputForHalfSecond
 	jp EnterMap
-
+	
+CheckValidWarp::
+	cp $ff
+	;ret nz
+	jr nz, .CheckXAfterWarp
+    ld hl, wd730
+	set 7, [hl] ; simulating key presses
+	ld a, [wWalkCounter]
+	and a
+	jr nz, .AlreadyThrownBack
+	callba ThrowBack
+.AlreadyThrownBack
+	pop af
+	jp OverworldLoop
+.CheckXAfterWarp
+	callba CheckCoordsAfterWarp
+	ld a,[wLastMapPointer]
+	ret
+	
 ContinueCheckWarpsNoCollisionLoop::
 	inc b ; increment warp number
 	dec c ; decrement number of warps
 	jp nz, CheckWarpsNoCollisionLoop
-
+	
 ; if no matching warp was found
 CheckMapConnections::
 .checkWestMap
@@ -551,6 +575,7 @@ CheckMapConnections::
 	cp $ff
 	jr nz, .checkEastMap
 	ld a, [wMapConn3Ptr]
+	call CheckValidWarp
 	ld [wCurMap], a
 	ld a, [wWestConnectedMapXAlignment] ; new X coordinate upon entering west map
 	ld [wXCoord], a
@@ -588,6 +613,7 @@ CheckMapConnections::
 	cp b
 	jr nz, .checkNorthMap
 	ld a, [wMapConn4Ptr]
+	call CheckValidWarp
 	ld [wCurMap], a
 	ld a, [wEastConnectedMapXAlignment] ; new X coordinate upon entering east map
 	ld [wXCoord], a
@@ -624,6 +650,7 @@ CheckMapConnections::
 	cp $ff
 	jr nz, .checkSouthMap
 	ld a, [wMapConn1Ptr]
+	call CheckValidWarp
 	ld [wCurMap], a
 	ld a, [wNorthConnectedMapYAlignment] ; new Y coordinate upon entering north map
 	ld [wYCoord], a
@@ -652,6 +679,7 @@ CheckMapConnections::
 	cp b
 	jr nz, .didNotEnterConnectedMap
 	ld a, [wMapConn2Ptr]
+	call CheckValidWarp
 	ld [wCurMap], a
 	ld a, [wSouthConnectedMapYAlignment] ; new Y coordinate upon entering south map
 	ld [wYCoord], a
@@ -1219,6 +1247,10 @@ IsSpriteInFrontOfPlayer2::
 ; function to check if the player will jump down a ledge and check if the tile ahead is passable (when not surfing)
 ; sets the carry flag if there is a collision, and unsets it if there isn't a collision
 CollisionCheckOnLand::
+	ld a, [hJoyInput]
+	and B_BUTTON
+	jr nz, .noCollision
+	
 	ld a, [wd736]
 	bit 6, a ; is the player jumping?
 	jr nz, .noCollision

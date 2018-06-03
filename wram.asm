@@ -2644,6 +2644,12 @@ wBoxItems:: ; d53b
 ; item, quantity
 	ds PC_ITEM_CAPACITY * 2
 	ds 1 ; end
+	
+wPlayerKeepDirection:: ; d540
+	ds 1
+ 
+wLastMapPointer:: ; d545
+	ds 1
 
 wCurrentBoxNum:: ; d5a0
 ; bits 0-6: box number
@@ -3025,6 +3031,7 @@ wd72e:: ; d72e
 
 wd730:: ; d730
 ; bit 0: NPC sprite being moved by script
+; bit 4: Do not update sprite direction
 ; bit 5: ignore joypad input
 ; bit 6: print text with no delay between each letter
 ; bit 7: set if joypad states are being simulated in the overworld or an NPC's movement is being scripted
