@@ -528,10 +528,8 @@ _HandleMidJump:
 	ld [wPlayerJumpingYScreenCoordsIndex], a
 	ld hl, wd736
 	res 6, [hl] ; not jumping down a ledge any more
-	ld hl, wd730
-	res 7, [hl] ; not simulating joypad states any more
-	xor a
-	ld [wJoyIgnore], a
+	nop
+	callba ResetStuff
 	ret
 
 PlayerJumpingYScreenCoords:

@@ -3025,6 +3025,7 @@ wd72e:: ; d72e
 
 wd730:: ; d730
 ; bit 0: NPC sprite being moved by script
+; bit 4: Do not update sprite direction
 ; bit 5: ignore joypad input
 ; bit 6: print text with no delay between each letter
 ; bit 7: set if joypad states are being simulated in the overworld or an NPC's movement is being scripted
@@ -3203,10 +3204,14 @@ wBoxMonNicksEnd:: ; dee2
 
 wBoxDataEnd::
 
+wPlayerKeepDirection::
+	ds 1
+ 
+wLastMapPointer::
+	ds 1
 
 SECTION "Stack", WRAM0[$df00]
 	ds $ff
 wStack:: ; dfff
-
 
 INCLUDE "sram.asm"

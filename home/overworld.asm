@@ -232,11 +232,9 @@ OverworldLoopLessDelay::
 	call NewBattle
 	jp c, .battleOccurred
 	jp OverworldLoop
-
 .noDirectionChange
-	ld a, [wPlayerDirection] ; current direction
-	ld [wPlayerMovingDirection], a ; save direction
-	call UpdateSprites
+	callba MovementDir
+	nop ;Keep size original
 	ld a, [wWalkBikeSurfState]
 	cp $02 ; surfing
 	jr z, .surfing
@@ -538,12 +536,12 @@ WarpFound2::
 	set 0, [hl] ; have the player's sprite step out from the door (if there is one)
 	call IgnoreInputForHalfSecond
 	jp EnterMap
-
+	
 ContinueCheckWarpsNoCollisionLoop::
 	inc b ; increment warp number
 	dec c ; decrement number of warps
 	jp nz, CheckWarpsNoCollisionLoop
-
+	
 ; if no matching warp was found
 CheckMapConnections::
 .checkWestMap
@@ -551,6 +549,7 @@ CheckMapConnections::
 	cp $ff
 	jr nz, .checkEastMap
 	ld a, [wMapConn3Ptr]
+	call doWarpCheck
 	ld [wCurMap], a
 	ld a, [wWestConnectedMapXAlignment] ; new X coordinate upon entering west map
 	ld [wXCoord], a
@@ -588,6 +587,7 @@ CheckMapConnections::
 	cp b
 	jr nz, .checkNorthMap
 	ld a, [wMapConn4Ptr]
+	call doWarpCheck
 	ld [wCurMap], a
 	ld a, [wEastConnectedMapXAlignment] ; new X coordinate upon entering east map
 	ld [wXCoord], a
@@ -624,6 +624,7 @@ CheckMapConnections::
 	cp $ff
 	jr nz, .checkSouthMap
 	ld a, [wMapConn1Ptr]
+	call doWarpCheck
 	ld [wCurMap], a
 	ld a, [wNorthConnectedMapYAlignment] ; new Y coordinate upon entering north map
 	ld [wYCoord], a
@@ -652,39 +653,36 @@ CheckMapConnections::
 	cp b
 	jr nz, .didNotEnterConnectedMap
 	ld a, [wMapConn2Ptr]
-	ld [wCurMap], a
-	ld a, [wSouthConnectedMapYAlignment] ; new Y coordinate upon entering south map
-	ld [wYCoord], a
-	ld a, [wXCoord]
-	ld c, a
-	ld a, [wSouthConnectedMapXAlignment] ; X adjustment upon entering south map
-	add c
-	ld c, a
-	ld [wXCoord], a
-	ld a, [wSouthConnectedMapViewPointer] ; pointer to upper left corner of map without adjustment for X position
-	ld l, a
-	ld a, [wSouthConnectedMapViewPointer + 1]
-	ld h, a
-	ld b, 0
-	srl c
-	add hl, bc
-	ld a, l
-	ld [wCurrentTileBlockMapViewPointer], a ; pointer to upper left corner of current tile block map section
-	ld a, h
-	ld [wCurrentTileBlockMapViewPointer + 1], a
+	call doWarpCheck
+	callba doLoadSouthData
+	
+	nop;Keep size original
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	
 .loadNewMap ; load the connected map that was entered
 	call LoadMapHeader
 	call PlayDefaultMusicFadeOutCurrent
 	ld b, SET_PAL_OVERWORLD
 	call RunPaletteCommand
-; Since the sprite set shouldn't change, this will just update VRAM slots at
-; $C2XE without loading any tile patterns.
+	; Since the sprite set shouldn't change, this will just update VRAM slots at
+	; $C2XE without loading any tile patterns.
 	callba InitMapSprites
 	call LoadTileBlockMap
 	jp OverworldLoopLessDelay
 
 .didNotEnterConnectedMap
 	jp OverworldLoop
+	
+doWarpCheck::
+	ld [wLastMapPointer],a
+	callba CheckValidWarp
+	ld a, [wLastMapPointer]
+	ret
 
 ; function to play a sound when changing maps
 PlayMapChangeSound::
@@ -1219,6 +1217,10 @@ IsSpriteInFrontOfPlayer2::
 ; function to check if the player will jump down a ledge and check if the tile ahead is passable (when not surfing)
 ; sets the carry flag if there is a collision, and unsets it if there isn't a collision
 CollisionCheckOnLand::
+	ld a, [hJoyInput]
+	and B_BUTTON
+	jr nz, .noCollision
+	
 	ld a, [wd736]
 	bit 6, a ; is the player jumping?
 	jr nz, .noCollision
@@ -1234,15 +1236,7 @@ CollisionCheckOnLand::
 	xor a
 	ld [hSpriteIndexOrTextID], a
 	call IsSpriteInFrontOfPlayer ; check for sprite collisions again? when does the above check fail to detect a sprite collision?
-	ld a, [hSpriteIndexOrTextID]
-	and a ; was there a sprite collision?
-	jr nz, .collision
-; if no sprite collision
-	ld hl, TilePairCollisionsLand
-	call CheckForJumpingAndTilePairCollisions
-	jr c, .collision
-	call CheckTilePassable
-	jr nc, .noCollision
+	callba doSomeTest
 .collision
 	ld a, [wChannelSoundIDs + Ch4]
 	cp SFX_COLLISION ; check if collision sound is already playing
@@ -1254,6 +1248,10 @@ CollisionCheckOnLand::
 	ret
 .noCollision
 	and a
+	nop
+	nop
+	nop
+	nop
 	ret
 
 ; function that checks if the tile in front of the player is passable

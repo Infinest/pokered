@@ -333,6 +333,7 @@ SilphCo6Blocks: INCBIN "maps/silphco6.blk"
 INCLUDE "engine/overworld/npc_movement.asm"
 INCLUDE "engine/overworld/doors.asm"
 INCLUDE "engine/overworld/ledges.asm"
+INCLUDE "engine/overworld/custom.asm"
 
 
 SECTION "bank7",ROMX,BANK[$7]
