@@ -3209,6 +3209,21 @@ wPlayerKeepDirection::
  
 wLastMapPointer::
 	ds 1
+	
+wOverrideWalkBikeSurfState::
+	ds 1
+	
+wOverrideCurMap::
+	ds 1
+	
+wMapWTWPreload::
+	ds 1
+	
+wNextMapHeight::
+	ds 1	
+	
+wNextMapWidth::
+	ds 1
 
 SECTION "Stack", WRAM0[$df00]
 	ds $ff

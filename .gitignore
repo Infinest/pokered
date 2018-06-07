@@ -11,6 +11,9 @@
 *.gbc
 *.gb
 
+# no savestates
+*.sn*
+
 # rgbds extras
 *.sym
 

@@ -44,6 +44,11 @@ GetYCoords::
 	ret
 	
 CheckCoordsAfterWarp::
+	ld a, 1
+	ld [wMapWTWPreload], a
+	call LoadMapAddyAndBank
+	xor a
+	ld [wMapWTWPreload], a
 	ld a,[wPlayerKeepDirection]
 	xor 1
 	jr z, .AlreadyThrownBack
@@ -70,11 +75,12 @@ CheckCoordsAfterWarp::
 	ld hl, wd730
 	set 7, [hl] ; simulating key presses
 	pop de
-	call GotoBankSwitchReturnToOWLoop
+	jp GotoBankSwitchReturnToOWLoop
 	
 .ReturnToRoutine
 	ret
 .LoadCoordDataWest
+	jp LoadMapAddyAndBank
 	call GetYCoords
 	ld a, [wWestConnectedMapYAlignment] ; Y adjustment upon entering west map
 	add c
@@ -82,6 +88,7 @@ CheckCoordsAfterWarp::
 	ld a,[wWestConnectionStripHeight]
 	jr .Continue
 .LoadCoordDataEast
+	;jp LoadMapAddyAndBank
 	call GetYCoords
 	ld a, [wEastConnectedMapYAlignment] ; Y adjustment upon entering east map
 	add c
@@ -121,6 +128,19 @@ MovementDir::
 	ld [wPlayerMovingDirection], a ; save direction
 .DontTurn
 	call UpdateSprites
+	;If B is held we jump over the collision check code
+    ld a, [hJoyInput]
+	and B_BUTTON
+	jr z, .Leave
+	ld a, 1
+	ld [wOverrideWalkBikeSurfState], a
+	ld [wOverrideCurMap], a
+	jp GotoBankSwitchReturnToOWLoopLessDelayNoColl
+.Leave
+	ld a,[wWalkBikeSurfState]
+	ld [wOverrideWalkBikeSurfState], a
+	ld a,[wCurMap]
+	ld [wOverrideCurMap], a
 	ret
 	
 CheckValidWarp::
@@ -135,33 +155,30 @@ CheckValidWarp::
 	jr nz, .AlreadyThrownBack
 	callba ThrowBack
 .AlreadyThrownBack
-	call GotoBankSwitchReturnToOWLoop
+	jp GotoBankSwitchReturnToOWLoop
 .CheckXAfterWarp
 	call CheckCoordsAfterWarp
 	ld a,[wLastMapPointer]
 	ret
 
-GotoBankSwitchReturnToOWLoop::
+GotoBankSwitchReturnToOWLoopLessDelayNoColl:
 	pop de
+	pop de
+	pop de
+	ld de, OverworldLoopLessDelay.noCollision
+	push de
+	jp GotoBankSwitchReturn
+	
+GotoBankSwitchReturnToOWLoop::
 	pop de
 	pop de
 	pop de
 	pop de
 	ld de, OverworldLoop
 	push de
-	call GotoBankSwitchReturn
-	
-GotoBankSwitchReturnToCollisionCheckLandNoColl::
-	pop de
-	pop de
-	pop de
-	pop de
-	ld de, CollisionCheckOnLand.noCollision
-	push de
-	call GotoBankSwitchReturn
+	jp GotoBankSwitchReturn
 	
 GotoBankSwitchReturn::
-	pop de
 	ld a, [H_LOADEDROMBANK]
 	push af
 	ld de, Bankswitch.Return
@@ -192,14 +209,19 @@ doLoadSouthData::
 	ld [wCurrentTileBlockMapViewPointer + 1], a
 	ret
 	
-doSomeTest::
-	ld a, [hSpriteIndexOrTextID]
-	and a ; was there a sprite collision?
-	ret nz
-; if no sprite collision
-	ld hl, TilePairCollisionsLand
-	call CheckForJumpingAndTilePairCollisions
-	ret c
-	call CheckTilePassable
-	ret c
-	call GotoBankSwitchReturnToCollisionCheckLandNoColl
+getMapAdressFromPointer::
+	ld hl, MapHeaderPointers
+	ld a, [wLastMapPointer]
+	sla a
+	jr nc, .noCarry1
+	inc h
+.noCarry1
+	add l
+	ld l, a
+	jr nc, .noCarry2
+	inc h
+.noCarry2
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a ; hl = base of map header
+	ret

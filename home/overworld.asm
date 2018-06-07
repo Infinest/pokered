@@ -274,7 +274,7 @@ OverworldLoopLessDelay::
 .moveAhead2
 	ld hl, wFlags_0xcd60
 	res 2, [hl]
-	ld a, [wWalkBikeSurfState]
+	ld a, [wOverrideWalkBikeSurfState]
 	dec a ; riding a bike?
 	jr nz, .normalPlayerSpriteAdvancement
 	ld a, [wd736]
@@ -376,7 +376,7 @@ DoBikeSpeedup::
 	ld a, [wNPCMovementScriptPointerTableNum]
 	and a
 	ret nz
-	ld a, [wCurMap]
+	ld a, [wOverrideCurMap]
 	cp ROUTE_17 ; Cycling Road
 	jr nz, .goFaster
 	ld a, [hJoyHeld]
@@ -1217,9 +1217,9 @@ IsSpriteInFrontOfPlayer2::
 ; function to check if the player will jump down a ledge and check if the tile ahead is passable (when not surfing)
 ; sets the carry flag if there is a collision, and unsets it if there isn't a collision
 CollisionCheckOnLand::
-	ld a, [hJoyInput]
-	and B_BUTTON
-	jr nz, .noCollision
+	;ld a, [hJoyInput]
+	;and B_BUTTON
+	;jr nz, .noCollision
 	
 	ld a, [wd736]
 	bit 6, a ; is the player jumping?
@@ -1236,7 +1236,15 @@ CollisionCheckOnLand::
 	xor a
 	ld [hSpriteIndexOrTextID], a
 	call IsSpriteInFrontOfPlayer ; check for sprite collisions again? when does the above check fail to detect a sprite collision?
-	callba doSomeTest
+	ld a, [hSpriteIndexOrTextID]
+	and a ; was there a sprite collision?
+	jr nz, .collision
+	; if no sprite collision
+	ld hl, TilePairCollisionsLand
+	call CheckForJumpingAndTilePairCollisions
+	jr c, .collision
+	call CheckTilePassable
+	jr nc, .noCollision
 .collision
 	ld a, [wChannelSoundIDs + Ch4]
 	cp SFX_COLLISION ; check if collision sound is already playing
@@ -1248,10 +1256,6 @@ CollisionCheckOnLand::
 	ret
 .noCollision
 	and a
-	nop
-	nop
-	nop
-	nop
 	ret
 
 ; function that checks if the tile in front of the player is passable
@@ -2028,6 +2032,14 @@ LoadPlayerSpriteGraphicsCommon::
 	lb bc, BANK(RedSprite), $0c
 	jp CopyVideoData
 
+LoadMapAddyAndBank::
+	ld a, [wLastMapPointer]
+	call SwitchToMapRomBank
+	ld a, [wLastMapPointer]
+	jp LoadMapHeader.entryForWTWPreLoad
+	ret 
+	
+	
 ; function to load data from the map header
 LoadMapHeader::
 	callba MarkTownVisitedAndLoadMissableObjects
@@ -2042,8 +2054,9 @@ LoadMapHeader::
 	ld [hPreviousTileset], a
 	bit 7, b
 	ret nz
-	ld hl, MapHeaderPointers
 	ld a, [wCurMap]
+.entryForWTWPreLoad
+	ld hl, MapHeaderPointers
 	sla a
 	jr nc, .noCarry1
 	inc h
@@ -2056,6 +2069,21 @@ LoadMapHeader::
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a ; hl = base of map header
+	
+; This code is for leaving the map loading process again because we only need the code to load the header and header pointer. Space saving FTW
+	ld a, [wMapWTWPreload]
+	and a
+	jr z,.skip
+	inc hl
+	ldi a,[hl]
+	ld [wNextMapHeight],a
+	ld a,[hl]
+	ld[wNextMapWidth],a
+	ld a, 6
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	ret
+.skip
 ; copy the first 10 bytes (the fixed area) of the map data to D367-D370
 	ld de, wCurMapTileset
 	ld c, $0a
