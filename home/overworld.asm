@@ -647,6 +647,14 @@ CheckMapConnections::
 	ld [wCurrentTileBlockMapViewPointer + 1], a
 	jp .loadNewMap
 
+	nop;Keep size original
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	
 .checkSouthMap
 	ld b, a
 	ld a, [wCurrentMapHeight2]
@@ -655,14 +663,6 @@ CheckMapConnections::
 	ld a, [wMapConn2Ptr]
 	call doWarpCheck
 	callba doLoadSouthData
-	
-	nop;Keep size original
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
 	
 .loadNewMap ; load the connected map that was entered
 	call LoadMapHeader
@@ -2032,14 +2032,6 @@ LoadPlayerSpriteGraphicsCommon::
 	lb bc, BANK(RedSprite), $0c
 	jp CopyVideoData
 
-LoadMapAddyAndBank::
-	ld a, [wLastMapPointer]
-	call SwitchToMapRomBank
-	ld a, [wLastMapPointer]
-	jp LoadMapHeader.entryForWTWPreLoad
-	ret 
-	
-	
 ; function to load data from the map header
 LoadMapHeader::
 	callba MarkTownVisitedAndLoadMissableObjects
@@ -2070,21 +2062,9 @@ LoadMapHeader::
 	ld h, [hl]
 	ld l, a ; hl = base of map header
 	
-; This code is for leaving the map loading process again because we only need the code to load the header and header pointer. Space saving FTW
-	ld a, [wMapWTWPreload]
-	and a
-	jr z,.skip
-	inc hl
-	ldi a,[hl]
-	ld [wNextMapHeight],a
-	ld a,[hl]
-	ld[wNextMapWidth],a
-	ld a, 6
-	ld [H_LOADEDROMBANK], a
-	ld [MBC1RomBank], a
-	ret
-.skip
+	jp LoadMapAddyAndBank.checkIfPreload
 ; copy the first 10 bytes (the fixed area) of the map data to D367-D370
+.ConNormally
 	ld de, wCurMapTileset
 	ld c, $0a
 .copyFixedHeaderLoop
@@ -2447,3 +2427,23 @@ ForceBikeOrSurf::
 	ld hl, LoadPlayerSpriteGraphics
 	call Bankswitch
 	jp PlayDefaultMusic ; update map/player state?
+	
+LoadMapAddyAndBank::
+	ld a, [wLastMapPointer]
+	call SwitchToMapRomBank
+	ld a, [wLastMapPointer]
+	jp LoadMapHeader.entryForWTWPreLoad
+.checkIfPreload
+	; This code is for leaving the map loading process again because we only need the code to load the header and header pointer. Space saving FTW
+	ld a, [wMapWTWPreload]
+	and a
+	jp z,LoadMapHeader.ConNormally
+	inc hl
+	ldi a,[hl]
+	ld [wNextMapHeight],a
+	ld a,[hl]
+	ld[wNextMapWidth],a
+	ld a, 6
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	ret

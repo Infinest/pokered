@@ -80,34 +80,32 @@ CheckCoordsAfterWarp::
 .ReturnToRoutine
 	ret
 .LoadCoordDataWest
-	jp LoadMapAddyAndBank
 	call GetYCoords
 	ld a, [wWestConnectedMapYAlignment] ; Y adjustment upon entering west map
 	add c
 	ld c, a
-	ld a,[wWestConnectionStripHeight]
+	ld a,[wNextMapHeight]
 	jr .Continue
 .LoadCoordDataEast
-	;jp LoadMapAddyAndBank
 	call GetYCoords
 	ld a, [wEastConnectedMapYAlignment] ; Y adjustment upon entering east map
 	add c
 	ld c, a
-	ld a,[wEastConnectionStripHeight]
+	ld a,[wNextMapHeight]
 	jr .Continue
 .LoadCoordDataNorth
 	call GetXCoords
 	ld a, [wNorthConnectedMapXAlignment] ; X adjustment upon entering north map
 	add c
 	ld c, a
-	ld a,[wNorthConnectedMapWidth]
+	ld a,[wNextMapWidth]
 	jr .Continue
 .LoadCoordDataSouth
 	call GetXCoords
 	ld a, [wSouthConnectedMapXAlignment] ; X adjustment upon entering south map
 	add c
 	ld c, a
-	ld a,[wSouthConnectedMapWidth]
+	ld a,[wNextMapWidth]
 	jr .Continue
 	
 ResetStuff::
@@ -208,6 +206,30 @@ doLoadSouthData::
 	ld a, h
 	ld [wCurrentTileBlockMapViewPointer + 1], a
 	ret
+	
+doLoadNorthData::
+	ld a, [wLastMapPointer]
+	ld [wCurMap], a
+	ld a, [wNorthConnectedMapYAlignment] ; new Y coordinate upon entering north map
+	ld [wYCoord], a
+	ld a, [wXCoord]
+	ld c, a
+	ld a, [wNorthConnectedMapXAlignment] ; X adjustment upon entering north map
+	add c
+	ld c, a
+	ld [wXCoord], a
+	ld a, [wNorthConnectedMapViewPointer] ; pointer to upper left corner of map without adjustment for X position
+	ld l, a
+	ld a, [wNorthConnectedMapViewPointer + 1]
+	ld h, a
+	ld b, 0
+	srl c
+	add hl, bc
+	ld a, l
+	ld [wCurrentTileBlockMapViewPointer], a ; pointer to upper left corner of current tile block map section
+	ld a, h
+	ld [wCurrentTileBlockMapViewPointer + 1], a
+	jp CheckMapConnections.loadNewMap
 	
 getMapAdressFromPointer::
 	ld hl, MapHeaderPointers
