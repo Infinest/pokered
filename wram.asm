@@ -3224,6 +3224,15 @@ wNextMapHeight::
 	
 wNextMapWidth::
 	ds 1
+	
+wLastXBeforeLeftMap::
+	ds 1
+	
+wLastYBeforeLeftMap::
+	ds 1
+	
+wDoSpriteOverride::
+	ds 1
 
 SECTION "Stack", WRAM0[$df00]
 	ds $ff

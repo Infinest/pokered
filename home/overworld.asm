@@ -588,36 +588,8 @@ CheckMapConnections::
 	jr nz, .checkNorthMap
 	ld a, [wMapConn4Ptr]
 	call doWarpCheck
-	ld [wCurMap], a
-	ld a, [wEastConnectedMapXAlignment] ; new X coordinate upon entering east map
-	ld [wXCoord], a
-	ld a, [wYCoord]
-	ld c, a
-	ld a, [wEastConnectedMapYAlignment] ; Y adjustment upon entering east map
-	add c
-	ld c, a
-	ld [wYCoord], a
-	ld a, [wEastConnectedMapViewPointer] ; pointer to upper left corner of map without adjustment for Y position
-	ld l, a
-	ld a, [wEastConnectedMapViewPointer + 1]
-	ld h, a
-	srl c
-	jr z, .savePointer2
-.pointerAdjustmentLoop2
-	ld a, [wEastConnectedMapWidth]
-	add MAP_BORDER * 2
-	ld e, a
-	ld d, 0
-	ld b, 0
-	add hl, de
-	dec c
-	jr nz, .pointerAdjustmentLoop2
-.savePointer2
-	ld a, l
-	ld [wCurrentTileBlockMapViewPointer], a ; pointer to upper left corner of current tile block map section
-	ld a, h
-	ld [wCurrentTileBlockMapViewPointer + 1], a
-	jp .loadNewMap
+	call .switchBankForExportedCode
+	jp doLoadEastData
 
 .checkNorthMap
 	ld a, [wYCoord]
@@ -625,35 +597,8 @@ CheckMapConnections::
 	jr nz, .checkSouthMap
 	ld a, [wMapConn1Ptr]
 	call doWarpCheck
-	ld [wCurMap], a
-	ld a, [wNorthConnectedMapYAlignment] ; new Y coordinate upon entering north map
-	ld [wYCoord], a
-	ld a, [wXCoord]
-	ld c, a
-	ld a, [wNorthConnectedMapXAlignment] ; X adjustment upon entering north map
-	add c
-	ld c, a
-	ld [wXCoord], a
-	ld a, [wNorthConnectedMapViewPointer] ; pointer to upper left corner of map without adjustment for X position
-	ld l, a
-	ld a, [wNorthConnectedMapViewPointer + 1]
-	ld h, a
-	ld b, 0
-	srl c
-	add hl, bc
-	ld a, l
-	ld [wCurrentTileBlockMapViewPointer], a ; pointer to upper left corner of current tile block map section
-	ld a, h
-	ld [wCurrentTileBlockMapViewPointer + 1], a
-	jp .loadNewMap
-
-	nop;Keep size original
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	call .switchBankForExportedCode
+	jp doLoadNorthData
 	
 .checkSouthMap
 	ld b, a
@@ -677,13 +622,91 @@ CheckMapConnections::
 
 .didNotEnterConnectedMap
 	jp OverworldLoop
+.switchBankForExportedCode::
+	ld a,6
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	ret
 	
 doWarpCheck::
 	ld [wLastMapPointer],a
 	callba CheckValidWarp
 	ld a, [wLastMapPointer]
 	ret
+	
+LoadMapAddyAndBank::
+	ld a, [wLastMapPointer]
+	call SwitchToMapRomBank
+	ld a, [wLastMapPointer]
+	jp LoadMapHeader.entryForWTWPreLoad
+.checkIfPreload
+	; This code is for leaving the map loading process again because we only need the code to load the header and header pointer. Space saving FTW
+	ld a, [wMapWTWPreload]
+	and a
+	jr z,.noPreload
+	inc hl
+	ldi a,[hl]
+	ld [wNextMapHeight],a
+	ld a,[hl]
+	ld[wNextMapWidth],a
+	ld a, 6
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	ret
+.noPreload
+; copy the first 10 bytes (the fixed area) of the map data to D367-D370
+	ld de, wCurMapTileset
+	ld c, $0a
+.copyFixedHeaderLoop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz,.copyFixedHeaderLoop
+	jp LoadMapHeader.ConNormally
 
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	
 ; function to play a sound when changing maps
 PlayMapChangeSound::
 	aCoord 8, 8 ; upper left tile of the 4x4 square the player's sprite is standing on
@@ -1471,13 +1494,16 @@ AdvancePlayerSprite::
 	ld hl, wWalkCounter ; walking animation counter
 	dec [hl]
 	jr nz, .afterUpdateMapCoords
-; if it's the end of the animation, update the player's map coordinates
-	ld a, [wYCoord]
-	add b
-	ld [wYCoord], a
-	ld a, [wXCoord]
-	add c
-	ld [wXCoord], a
+	ld a, BANK(updatePlayerCoords)
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	jp updatePlayerCoords
+	
+	nop ;Keep size original
+	nop
+	nop
+	nop
+	
 .afterUpdateMapCoords
 	ld a, [wWalkCounter] ; walking animation counter
 	cp $07
@@ -2061,19 +2087,19 @@ LoadMapHeader::
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a ; hl = base of map header
-	
 	jp LoadMapAddyAndBank.checkIfPreload
-; copy the first 10 bytes (the fixed area) of the map data to D367-D370
-.ConNormally
-	ld de, wCurMapTileset
-	ld c, $0a
-.copyFixedHeaderLoop
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec c
-	jr nz, .copyFixedHeaderLoop
+	
+	nop;Keep size original
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	
 ; initialize all the connected maps to disabled at first, before loading the actual values
+.ConNormally
 	ld a, $ff
 	ld [wMapConn1Ptr], a
 	ld [wMapConn2Ptr], a
@@ -2325,7 +2351,7 @@ CopyMapConnectionHeader::
 	dec c
 	jr nz, .loop
 	ret
-
+	
 ; function to load map data
 LoadMapData::
 	ld a, [H_LOADEDROMBANK]
@@ -2428,22 +2454,3 @@ ForceBikeOrSurf::
 	call Bankswitch
 	jp PlayDefaultMusic ; update map/player state?
 	
-LoadMapAddyAndBank::
-	ld a, [wLastMapPointer]
-	call SwitchToMapRomBank
-	ld a, [wLastMapPointer]
-	jp LoadMapHeader.entryForWTWPreLoad
-.checkIfPreload
-	; This code is for leaving the map loading process again because we only need the code to load the header and header pointer. Space saving FTW
-	ld a, [wMapWTWPreload]
-	and a
-	jp z,LoadMapHeader.ConNormally
-	inc hl
-	ldi a,[hl]
-	ld [wNextMapHeight],a
-	ld a,[hl]
-	ld[wNextMapWidth],a
-	ld a, 6
-	ld [H_LOADEDROMBANK], a
-	ld [MBC1RomBank], a
-	ret

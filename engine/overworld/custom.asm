@@ -1,3 +1,720 @@
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+
 ThrowBack::
 	ld hl, wd736
 	set 6, [hl] ; jumping down ledge
@@ -114,6 +831,10 @@ ResetStuff::
 	xor a
 	ld [wPlayerKeepDirection], a
 	ld [wJoyIgnore], a
+	ld a, [wXCoord]
+	ld [wLastXBeforeLeftMap], a
+	ld a, [wYCoord]
+	ld [wLastYBeforeLeftMap], a
 	ret
 	
 MovementDir::
@@ -144,14 +865,13 @@ MovementDir::
 CheckValidWarp::
 	ld a,[wLastMapPointer]
 	cp $ff
-	;ret nz
 	jr nz, .CheckXAfterWarp
     ld hl, wd730
 	set 7, [hl] ; simulating key presses
 	ld a, [wWalkCounter]
 	and a
 	jr nz, .AlreadyThrownBack
-	callba ThrowBack
+	call ThrowBack
 .AlreadyThrownBack
 	jp GotoBankSwitchReturnToOWLoop
 .CheckXAfterWarp
@@ -231,19 +951,67 @@ doLoadNorthData::
 	ld [wCurrentTileBlockMapViewPointer + 1], a
 	jp CheckMapConnections.loadNewMap
 	
-getMapAdressFromPointer::
-	ld hl, MapHeaderPointers
-	ld a, [wLastMapPointer]
-	sla a
-	jr nc, .noCarry1
-	inc h
-.noCarry1
-	add l
+doLoadEastData::
+	ld a,[wLastMapPointer]
+	ld [wCurMap], a
+	ld a, [wEastConnectedMapXAlignment] ; new X coordinate upon entering east map
+	ld [wXCoord], a
+	ld a, [wYCoord]
+	ld c, a
+	ld a, [wEastConnectedMapYAlignment] ; Y adjustment upon entering east map
+	add c
+	ld c, a
+	ld [wYCoord], a
+	ld a, [wEastConnectedMapViewPointer] ; pointer to upper left corner of map without adjustment for Y position
 	ld l, a
-	jr nc, .noCarry2
-	inc h
-.noCarry2
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a ; hl = base of map header
+	ld a, [wEastConnectedMapViewPointer + 1]
+	ld h, a
+	srl c
+	jr z, .savePointer2
+.pointerAdjustmentLoop2
+	ld a, [wEastConnectedMapWidth]
+	add MAP_BORDER * 2
+	ld e, a
+	ld d, 0
+	ld b, 0
+	add hl, de
+	dec c
+	jr nz, .pointerAdjustmentLoop2
+.savePointer2
+	ld a, l
+	ld [wCurrentTileBlockMapViewPointer], a ; pointer to upper left corner of current tile block map section
+	ld a, h
+	ld [wCurrentTileBlockMapViewPointer + 1], a
+	jp CheckMapConnections.loadNewMap
+	
+updatePlayerCoords::
+; if it's the end of the animation, update the player's map coordinates
+	ld a, 2
+	ld [wDoSpriteOverride], a
+	ld a, [wYCoord]
+	add b
+	ld [wYCoord], a
+	ld d, a
+	cp $ff
+	jr z, .dontOverWriteOldY
+	ld a,d
+	ld [wLastYBeforeLeftMap],a
+	call .defuse
+.dontOverWriteOldY
+	ld a, [wXCoord]
+	add c
+	ld [wXCoord], a
+	ld d, a
+	cp $ff
+	jr z, .dontOverWriteOldX
+	ld a, d
+	ld [wLastXBeforeLeftMap],a
+	call .defuse
+.dontOverWriteOldX
+	jp AdvancePlayerSprite.afterUpdateMapCoords
+.defuse
+	ld a, [wDoSpriteOverride]
+	dec a
+	ld [wDoSpriteOverride], a
 	ret
+	

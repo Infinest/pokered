@@ -485,25 +485,37 @@ CheckSpriteAvailability:
 	jr c, .skipXVisibilityTest ; movement byte 1 < $fe (i.e. the sprite's movement is scripted)
 	ld a, [H_CURRENTSPRITEOFFSET]
 	add $4
-	ld l, a
-	ld b, [hl]      ; c2x4: Y pos (+4)
-	ld a, [wYCoord]
-	cp b
-	jr z, .skipYVisibilityTest
-	jr nc, .spriteInvisible ; above screen region
-	add $8                  ; screen is 9 tiles high
-	cp b
-	jr c, .spriteInvisible  ; below screen region
-.skipYVisibilityTest
-	inc l
-	ld b, [hl]      ; c2x5: X pos (+4)
-	ld a, [wXCoord]
-	cp b
-	jr z, .skipXVisibilityTest
-	jr nc, .spriteInvisible ; left of screen region
-	add $9                  ; screen is 10 tiles wide
-	cp b
-	jr c, .spriteInvisible  ; right of screen region
+	
+	jp spriteVisibilityDetour
+	
+	nop ;Keep size original
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop	
+	nop
+	nop
+	nop
+	nop
+	nop	
+	
 .skipXVisibilityTest
 ; make the sprite invisible if a text box is in front of it
 ; $5F is the maximum number for map tiles
