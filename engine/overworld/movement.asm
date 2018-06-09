@@ -488,33 +488,7 @@ CheckSpriteAvailability:
 	
 	jp spriteVisibilityDetour
 	
-	nop ;Keep size original
-	nop
-	nop
-	nop
-	nop	
-	nop
-	nop
-	nop
-	nop
-	nop	
-	nop
-	nop
-	nop
-	nop
-	nop	
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop	
-	nop
-	nop
-	nop
-	nop
-	nop	
+	ds 27 ;Keep size original
 	
 .skipXVisibilityTest
 ; make the sprite invisible if a text box is in front of it

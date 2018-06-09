@@ -234,7 +234,7 @@ OverworldLoopLessDelay::
 	jp OverworldLoop
 .noDirectionChange
 	callba MovementDir
-	nop ;Keep size original
+	ds 1 ;Keep size original
 	ld a, [wWalkBikeSurfState]
 	cp $02 ; surfing
 	jr z, .surfing
@@ -1499,10 +1499,7 @@ AdvancePlayerSprite::
 	ld [MBC1RomBank], a
 	jp updatePlayerCoords
 	
-	nop ;Keep size original
-	nop
-	nop
-	nop
+	ds 4 ;Keep size original
 	
 .afterUpdateMapCoords
 	ld a, [wWalkCounter] ; walking animation counter
@@ -2089,14 +2086,7 @@ LoadMapHeader::
 	ld l, a ; hl = base of map header
 	jp LoadMapAddyAndBank.checkIfPreload
 	
-	nop;Keep size original
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	ds 8 ;Keep size original
 	
 ; initialize all the connected maps to disabled at first, before loading the actual values
 .ConNormally
