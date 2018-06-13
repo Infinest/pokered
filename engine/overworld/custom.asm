@@ -131,6 +131,9 @@ MovementDir::
 	ld [wPlayerMovingDirection], a ; save direction
 .DontTurn
 	call UpdateSprites
+	ld a,[wd730]
+	xor $80
+	jr z, .Leave
 	;If B is held we jump over the collision check code
     ld a, [hJoyInput]
 	and B_BUTTON
