@@ -387,10 +387,12 @@ DoBikeSpeedup::
 
 ; check if the player has stepped onto a warp after having not collided
 CheckWarpsNoCollision::
-	ld a, [wNumberOfWarps]
-	and a
-	jp z, CheckMapConnections
-	ld a, [wNumberOfWarps]
+	ld a, BANK(noCollisionWarpDetour);
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	jp noCollisionWarpDetour
+	
+.detourContinue
 	ld b, 0
 	ld c, a
 	ld a, [wYCoord]

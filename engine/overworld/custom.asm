@@ -302,3 +302,15 @@ updatePlayerCoords::
 	ld [wDoSpriteOverride], a
 	ret
 	
+	;We do not want to warp while we are being thrown back. We check for that here
+noCollisionWarpDetour::
+	ld a, [wPlayerKeepDirection]
+	xor 1
+	jp z, OverworldLoop
+	ld a, [wNumberOfWarps]
+	and a
+	jp z, CheckMapConnections
+	ld a, [wNumberOfWarps]
+	jp CheckWarpsNoCollision.detourContinue
+
+	
